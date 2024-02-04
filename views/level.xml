@@ -1,0 +1,88 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="level_view_form">
+            <field name="name">Level</field>
+            <field name="model">level.level</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+
+                            <notebook>
+                                <page string="Materials">
+                                    <group>
+                                        <field name="material_lines" string="Materials">
+                                            <tree string="Materials" editable="bottom">
+                                                <field name="name"/>
+                                                <field name="basic_teacher"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </page>
+                                <page string="Students">
+                                    <group>
+                                        <field name="students_ids">
+                                            <tree>
+                                                <field name="name"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="level_view_list">
+            <field name="name">Level</field>
+            <field name="model">level.level</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" width="40%"/>
+                    <field name="start_date" width="30%"/>
+                    <field name="end_date" width="30%"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="level_action">
+            <field name="name">Level</field>
+            <field name="res_model">level.level</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            id="menu_level_root"
+            name="level"
+            parent="menu_school_root"
+            sequence="3"
+        />
+
+        <menuitem
+            sequence="3"
+            action="level_action"
+            id="menu_level_action"
+            parent="menu_level_root"
+        />
+    </data>
+</odoo>

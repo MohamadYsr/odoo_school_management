@@ -1,0 +1,377 @@
+<odoo>
+    <data>
+        <!--=========================================Student=========================================-->
+        <record id="student_calendar_view" model="ir.ui.view">
+            <field name="name">student.calender</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <calendar
+                        date_start="birthdate"
+                        date_stop="birthdate"
+                        string="Students"
+                        mode="month"
+                        scales="month,year"
+                        event_open_popup="true"
+                        quick_add="false"
+                >
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="student_view_graph" model="ir.ui.view">
+            <field name="name">student.report.graph</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <graph string="Student Analysis" sample="2">
+                    <field name="name"/>
+                    <field name="birthdate" interval="year"/>
+                    <field name="age" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="student_view_kanban" model="ir.ui.view">
+            <field name="name">student</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div>
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                            </div>
+                                <div>
+                                    <field name="image_1000" widget="image" class="oe_avatar" style="width: 50px; height: 50px; margin-top: 5px; margin-bottom: 5px;"/>
+                                </div>
+                            <div>
+                                <strong>
+                                    <field name="birthdate"/>
+                                </strong>
+                            </div>
+                            <div>
+                                <strong>
+                                    <field name="age"/>
+                                </strong>
+                            </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_student_filter" model="ir.ui.view">
+            <field name="name">student.student.search</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <search string="students">
+                    <field name="name" string="Student Name"/>
+                    <field name="age" string="Age"/>
+                    <field name="gender" string="Gender"/>
+                    <separator/>
+                    <filter name="small" string="Small Students" domain="[('age', '&lt;', 12)]"/>
+                    <filter name="medium" string="Medium Students" domain="[('age', '&gt;=', 12),('age', '&lt;', 17)]"/>
+                    <filter name="big" string="Big Students" domain="[('age', '&gt;=', 17)]"/>
+                    <separator/>
+                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="gender" string="Gender" domain="[]" context="{'group_by': 'gender'}"/>
+                        <filter name="age" string="Age" domain="[]" context="{'group_by': 'age'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="student_view_form">
+            <field name="name">Students</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <form string="Students">
+                    <header>
+                        <button name="action_done" states="draft,cancel" groups="school_ms.group_school_manager" string="Make Done" type="object" class="oe_highlight"/>
+                        <button name="action_draft" states="done,cancel" groups="school_ms.group_school_manager" string="Make Draft" type="object" class="oe_highlight"/>
+                        <button name="action_cancel" states="draft,done" groups="school_ms.group_school_manager" string="Cancel" type="object" class="oe_highlight"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <field name="active" invisible="1"/>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="name" required="1"/>
+                                <field name="image_1000" widget="image" class="oe_avatar"/>
+                                <field name="age"/>
+                            </group>
+
+                            <group>
+                                <field name="birthdate"/>
+                                <field name="gender"/>
+                                <field name="grade"/>
+                                <field name="basic_teacher" domain="[('grade', '=', grade)]"/>
+                                <field name="create_uid"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Extra Info">
+                                <group>
+                                    <field name="note" placeholder="Type your note about the student"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="student_view_list">
+            <field name="name">Student</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="age"/>
+                    <field name="birthdate" width="25%"/>
+                    <field name="gender"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="student_action">
+            <field name="name">Students</field>
+            <field name="res_model">student.student</field>
+            <field name="view_mode">tree,kanban,graph,calendar,form</field>
+        </record>
+
+        <menuitem
+                id="menu_school_root"
+                name="School MS"
+                web_icon="school_ms,static/description/icon.png"
+                sequence="28"
+        />
+
+        <menuitem
+                id="menu_student_root"
+                name="Student"
+                parent="menu_school_root"
+                sequence="1"
+        />
+
+        <menuitem
+                sequence="3"
+                name="Student"
+                action="student_action"
+                id="menu_building_list_sub"
+                parent="menu_student_root"/>
+
+        <!--=========================================Teacher=========================================-->
+
+        <record model="ir.ui.view" id="view_teacher_kanban">
+            <field name="name">Teacher</field>
+            <field name="model">teacher.teacher</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div>
+                                    <strong>
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <div>
+                                    <field name="image" widget="image" class="oe_avatar" style="width: 50px; height: 50px; margin-top: 5px; margin-bottom: 5px"/>
+                                </div>
+                                <div>
+                                    <strong>
+                                        <field name="birthdate"/>
+                                    </strong>
+                                </div>
+                                <div>
+                                    <strong>
+                                        <field name="age"/>
+                                    </strong>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_teacher_filter">
+            <field name="name">teacher.teacher.search</field>
+            <field name="model">teacher.teacher</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" string="Teacher Name"/>
+                    <field name="age" string="Age"/>
+                    <field name="gender" string="Gender"/>
+                    <separator/>
+                    <filter name="small" string="Young Teacher" domain="[('age', '&lt;', 30)]"/>
+                    <filter name="medium" string="Medium Teacher" domain="[('age', '&gt;=', 30),('age', '&lt;', 50)]"/>
+                    <filter name="big" string="Big Teacher" domain="[('age', '&gt;=', 50)]"/>
+                    <separator/>
+                    <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="age" string="Age" domain="[]" context="{'group_by': 'age'}"/>
+                        <filter name="gender" string="Gender" domain="[]" context="{'group_by': 'gender'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="teacher_view_form">
+            <field name="name">Teacher</field>
+            <field name="model">teacher.teacher</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="active" invisible="1"/>
+
+                        <button name="action_done" states="draft,cancel" string="Make Done" type="object" class="oe_highlight"
+                                 groups="school_ms.group_school_manager"/>
+                        <button name="action_cancel" states="draft,done" string="Cancel" type="object" class="oe_highlight"
+                                 groups="school_ms.group_school_manager"/>
+                        <button name="action_draft" states="done,cancel" string="Reset To Draft" type="object" class="oe_highlight"
+                                 groups="school_ms.group_school_manager"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="image" widget="image" class="oe_avatar"/>
+                                <field name="age"/>
+                            </group>
+
+                            <group>
+                                <field name="birthdate"/>
+                                <field name="gender"/>
+                                <field name="grade"/>
+                            </group>
+
+                            <notebook>
+                                <page string="Extra Info">
+                                    <group>
+                                        <field name="note"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="teacher_view_list">
+            <field name="name">Teacher</field>
+            <field name="model">teacher.teacher</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" width="40%"/>
+                    <field name="age" width="30%"/>
+                    <field name="gender" width="30%"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="teacher_action">
+            <field name="name">Teacher</field>
+            <field name="res_model">teacher.teacher</field>
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+
+        <menuitem
+                id="menu_teacher_root"
+                name="Teacher"
+                parent="menu_school_root"
+                sequence="2"
+        />
+
+        <menuitem
+                sequence="3"
+                action="teacher_action"
+                id="menu_teacher_action"
+                parent="menu_teacher_root"
+        />
+
+        <!-- explicit list view definition -->
+        <!--
+            <record model="ir.ui.view" id="school_ms.list">
+              <field name="name">school_ms list</field>
+              <field name="model">school_ms.school_ms</field>
+              <field name="arch" type="xml">
+                <tree>
+                  <field name="name"/>
+                  <field name="value"/>
+                  <field name="value2"/>
+                </tree>
+              </field>
+            </record>
+        -->
+
+        <!-- actions opening views on models -->
+        <!--
+            <record model="ir.actions.act_window" id="school_ms.action_window">
+              <field name="name">school_ms window</field>
+              <field name="res_model">school_ms.school_ms</field>
+              <field name="view_mode">tree,form</field>
+            </record>
+        -->
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="school_ms.action_server">
+              <field name="name">school_ms server</field>
+              <field name="model_id" ref="model_first_app_first_app"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+        <!-- Top menu item -->
+        <!--
+            <menuitem name="school_ms" id="school_ms.menu_root"/>
+        -->
+        <!-- menu categories -->
+        <!--
+            <menuitem name="Menu 1" id="school_ms.menu_1" parent="school_ms.menu_root"/>
+            <menuitem name="Menu 2" id="school_ms.menu_2" parent="school_ms.menu_root"/>
+        -->
+        <!-- actions -->
+        <!--
+            <menuitem name="List" id="school_ms.menu_1_list" parent="school_ms.menu_1"
+                      action="school_ms.action_window"/>
+            <menuitem name="Server to list" id="school_ms" parent="school_ms.menu_2"
+                      action="school_ms.action_server"/>
+        -->
+    </data>
+</odoo>
