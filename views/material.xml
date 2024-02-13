@@ -1,0 +1,48 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="material_view_form">
+            <field name="name">Material</field>
+            <field name="model">material.material</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="active" invisible="1" />
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}" />
+
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="active" />
+                            </group>
+
+                            <group>
+                                <field name="basic_teacher"/>
+                                <field name="level_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" />
+                        <field name="activity_ids" />
+                        <field name="message_ids" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="material_view_list">
+            <field name="name">Material</field>
+            <field name="model">material.material</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" width="25%%"/>
+                    <field name="basic_teacher" width="25%"/>
+                    <field name="level_id" width="25%"/>
+                    <field name="active" width="25%" />
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

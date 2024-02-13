@@ -1,5 +1,14 @@
 <odoo>
     <data>
+
+        <record model="ir.actions.act_window" id="material_action">
+            <field name="name">Material</field>
+            <field name="res_model">material.material</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('level_id', '=', active_id)]</field>
+            <field name="context">{'default_level_id': active_id}</field>
+        </record>
+
         <record model="ir.ui.view" id="level_view_form">
             <field name="name">Level</field>
             <field name="model">level.level</field>
@@ -10,6 +19,27 @@
                     </header>
 
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_material"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-globe icon">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Materials</span>
+                                </div>
+                            </button>
+
+                            <button name="%(school_ms.material_action)d"
+                                    type="action"
+                                    class="oe_stat_button"
+                                    icon="fa-globe icon">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Materials</span>
+                                    <span class="o_stat_text">Action</span>
+                                </div>
+                            </button>
+                        </div>
+
                         <group>
                             <group>
                                 <field name="name"/>

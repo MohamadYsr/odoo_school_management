@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <record model="ir.actions.report" id="school_student_report">
+            <field name="name">School Student</field>
+            <field name="model">student.student</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">('student - %s' % (object.name))</field>
+            <field name="report_name">school_ms.report_student</field>
+            <field name="report_file">school_ms.report_student</field>
+            <field name="binding_model_id" ref="model_student_student"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record model="ir.actions.report" id="student_details_report">
+            <field name="name">Student Details</field>
+            <field name="model">student.student</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">school_ms.report_studentdetails</field>
+        </record>
+
+        <record model="ir.actions.report" id="student_details_xlsx">
+            <field name="name">Student Details</field>
+            <field name="model">wizard_report_student</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">school_ms.student_details_xlsx</field>
+            <field name="report_file">school_ms.student_details_xlsx</field>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'portal', 'mail', 'utm'],
+    'depends': ['base', 'portal', 'mail', 'utm', 'report_xlsx'],
 
     # always loaded
     'data': [
@@ -28,8 +28,11 @@
         'data/data.xml',
         'views/views.xml',
         'views/level.xml',
+        'views/material.xml',
         'views/setting.xml',
         'views/templates.xml',
+        'report/report.xml',
+        'wizard/report_student_wizard.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

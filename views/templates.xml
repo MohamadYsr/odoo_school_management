@@ -1,5 +1,107 @@
 <odoo>
     <data>
+
+        <template id="report_student_document">
+            <t t-call="web.external_layout">
+                <t t-set="doc" t-value="doc" />
+                <div class="page">
+                    <div class="oe_structure" />
+                    <h2 class="mt-4">
+                        <span>Student Name #</span>
+                        <span t-field="doc.name" />
+                    </h2>
+
+                    <div class="row mt-4 mb-4" id="information">
+                        <div t-if="doc.age" class="col-auto col-3 mw-100 mb-2" name="informations_reference">
+                            <strong>Age:</strong>
+                            <p class="m-0" t-field="doc.age" />
+                        </div>
+
+                        <div t-if="doc.birthdate" class="col-auto col-3 mw-100 mb-2" name="informations_date">
+                            <stromg>Birth Date:</stromg>
+                            <p class="m-0" t-field="doc.birthdate" />
+                        </div>
+
+                        <div t-if="doc.gender" class="col-auto col-3 mw-100 mb-2">
+                            <strong>Gender:</strong>
+                            <p class="m-0" t-field="doc.gender" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-4 mb-4" id="informations">
+                        <div t-if="doc.note" class="col-auto col-6 mw-100 mb-2" name="informations_reference">
+                            <strong>note:</strong>
+                            <p class="m-0" t-field="doc.note" />
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_student">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="school_ms.report_student_document" />
+                </t>
+            </t>
+        </template>
+
+        <template id="report_studentdetails">
+            <t t-call="web.html_container">
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Student Details</h2>
+                        </div>
+
+                        <div>
+                            <br/>
+
+                            <t t-if="data['grade']" class="text-end">
+                                <span>
+                                    Grade:
+                                    <t t-esc="data['grade']" />
+                                </span>
+                            </t>
+
+                            <t t-if="not data['grade']" class="text-end">
+                                <span>
+                                    All Grades
+                                </span>
+                            </t>
+                        </div>
+
+                        <h3>Students</h3>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Age</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr t-foreach='students' t-as="line">
+                                    <td>
+                                        <t t-esc="line['name']" />
+                                    </td>
+
+                                    <td>
+                                        <t t-esc="line['age']" />
+                                    </td>
+
+                                    <td>
+                                        <t t-esc="line['grade']" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </template>
+
 <!--
         <template id="listing">
           <ul>

@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="student_report_view_form">
+            <field name="name">Student Report</field>
+            <field name="model">wizard.report.student</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="show_all_grades" />
+                            <field name="grade" />
+                        </group>
+                    </group>
+
+                    <footer>
+                        <button name="print_report_pdf" string="Print PDF" type="object" default_focus="1"
+                                class="oe_highlight" data_hotkey="q" />
+
+                        <button name="print_report_xlsx" string="Print To Excel" type="object" default_focus="1"
+                                class="oe_highlight" data_hotkey="x"/>
+
+                        <button string="Cancel" class="btn btn-secondary" special="cancel" data_hotkey="z" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_report_wizard_student">
+            <field name="name">Student Report</field>
+            <field name="res_model">wizard.report.student</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_reports"
+                  name="Reports"
+                  parent="menu_school_root"
+                  sequence="6" />
+
+        <menuitem id="menu_sm_config"
+                  name="Student Report"
+                  parent="menu_reports"
+                  sequence="1"
+                  action="action_report_wizard_student" />
+    </data>
+</odoo>
